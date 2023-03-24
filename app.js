@@ -80,13 +80,13 @@ app.patch('/users/:id', (req, res) => {
 app.put('/users/:id', (req, res)=>{
     const data = req.body;
     const userData = [data.user_name, data.age];
-    mysqlconnection.query("UPDATE users SET user_name = ?, age = ? WHERE id = ? ", [userData, req.params.id], (err, rows)=>{
+    mysqlconnection.query("UPDATE users SET ? WHERE id = ? ", [data, req.params.id], (err, rows)=>{
         if(err){
             console.log(err);
         }
         else {
-            if (affectedRows === 0) {
-                mysqlconnection.query("INSERT INTO users (user_name, age) VALUES (?) WHERE id = ?", [userData, req.params.id], (err, rows) => {
+            if (rows.affectedRows === 0) {
+                mysqlconnection.query("INSERT INTO users (user_name, age) VALUES (?)", [userData], (err, rows) => {
                     if(err){
                         console.log(err);
                     }
